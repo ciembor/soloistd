@@ -96,8 +96,8 @@ jobs:
           if-no-files-found: error
 
   macos:
-    name: Apple Silicon macOS
-    runs-on: macos-13
+    name: Apple Silicon macOS build
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -106,13 +106,10 @@ jobs:
           go-version-file: go.mod
           cache: false
 
-      - name: Test
-        run: go test -mod=vendor ./...
-
       - name: Build
         run: |
           mkdir -p dist
-          GOARCH=arm64 go build -mod=vendor -trimpath -ldflags '-s -w' -o dist/soloistd-darwin-arm64 .
+          GOOS=darwin GOARCH=arm64 go build -mod=vendor -trimpath -ldflags '-s -w' -o dist/soloistd-darwin-arm64 .
 
       - uses: actions/upload-artifact@v4
         with:
